@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "parcel-plugin-bundle-visualiser": "^1.1.2",
+    "typescript": "^2.9.1"
+  }
+}
