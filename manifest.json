@@ -11,8 +11,12 @@
 		"default_icon": "19.png"
 	},
 	"background": {
-		"scripts": ["background.js"],
+		"scripts": [
+			"background.js"
+		],
 		"persistent": false
 	},
-	"permissions": ["activeTab"]
+	"permissions": [
+		"activeTab"
+	]
 }

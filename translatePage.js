@@ -1,7 +1,7 @@
 /**
  * @description Contains string pairs for translation
  */
-export const translationStringPairs = [
+const translationStringPairs = [
 	'3-stelliger Steuercode (oder weiter ohne Eingabe)|3-digit control code (or continue without input)',
 	'ab Werk WOB-Fallersleben|From factory WOB-Fallersleben',
 	'ab Werk WOB|From factory WOB',
@@ -116,3 +116,62 @@ export const translationStringPairs = [
 	'Zugnummernprüfung|Checking train number',
 	'Zum Host ARV_DREC021 konnte kein Compound ermittelt werden! \n|No compound could be determined for host ARV_DREC021!'
 ];
+
+// const possibleTextClasses = [
+// 	'sapUiInvisibleText',
+// 	'sapMText',
+// 	'sapMSLITitleOnly',
+// 	'sapMFeedListItemInfoText',
+// 	'sapMObjectAttributeText',
+// 	'sapMBtnContent'
+// ];
+
+// const possibleTextIDs = [
+// 	'__label1-bdi',
+// 	'__label14-bdi',
+// 	'__label15-bdi',
+// 	'__label16-bdi',
+// 	'__error0-title-inner'
+// ];
+function main() {
+	iterateThroughMostInnerDivs();
+	setInterval(() => {
+		iterateThroughMostInnerDivs();
+	}, 10);
+}
+
+function iterateThroughMostInnerDivs() {
+	const bodyDivs = document.body.getElementsByTagName('*');
+
+	/**
+	 * @type {Array<Element>}
+	 */
+	const mostInnerDivs = [...bodyDivs].filter(e => e.childElementCount === 0);
+	for (const pair of translationStringPairs) {
+		const germanText = pair.split('|')[0];
+
+		for (let i = 0; i < mostInnerDivs.length; i++) {
+			const currentNode = mostInnerDivs[i];
+			if (currentNode.textContent === germanText) {
+				// console.log(currentNode.textContent);
+				const englishTranslation = pair.split('|')[1];
+				currentNode.textContent = englishTranslation;
+			}
+
+			if (currentNode.tagName === 'INPUT') {
+				const inputNode = /**@type {HTMLInputElement} */ (currentNode);
+				if (inputNode.placeholder === germanText) {
+					const englishTranslation = pair.split('|')[1];
+					inputNode.placeholder = englishTranslation;
+				}
+
+				if (inputNode.placeholder === 'VIN') {
+					inputNode.placeholder = 'TMBJJ7NE4H0071010';
+				}
+			}
+		}
+	}
+}
+
+console.log('Translation background server started.');
+main();

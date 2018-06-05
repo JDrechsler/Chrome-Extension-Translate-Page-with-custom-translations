@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"module": "es6",
+		"target": "esnext",
+		"lib": ["dom", "esnext", "dom.iterable"],
+		"strict": true,
+		"noImplicitAny": true,
+		"suppressImplicitAnyIndexErrors": false
+	}
+}

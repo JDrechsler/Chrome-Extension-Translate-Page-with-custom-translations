@@ -1,9 +1,0 @@
-{
-	"compilerOptions": {
-		"module": "esnext",
-		// "sourceMap": false,
-		"target": "esnext",
-		"lib": ["dom", "esnext"]
-	},
-	"exclude": ["node_modules"]
-}
