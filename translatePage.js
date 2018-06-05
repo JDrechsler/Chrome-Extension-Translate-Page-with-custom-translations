@@ -12,6 +12,7 @@ const translationStringPairs = [
 	'Automatik|Automatic',
 	'Backend wird aufgerufen|Calling backend system',
 	'Bahn|Train',
+	'Bahneingang|Inbound Train',
 	'befindet sich im Fahrzeug ein Beipack?|Is there an accessory pack in the vehicle?',
 	'Benzin|Gasoline',
 	'Bitte die Zugnummer erfassen|Please enter the train number',
@@ -31,12 +32,14 @@ const translationStringPairs = [
 	'Bitte wählen Sie die Reifenart aus|Please select the tire type',
 	'Bitte warten...|Please wait...',
 	'Compound auswählen|Choose compound',
+	'Dienstleistungsgruppen| Service Groups',
+	'Keine Dienstleistungsgruppen verfügbar|No service groups available',
 	'Datum|Date',
 	'Details zur Ladung|Load details',
 	'Drucken|Print',
+	'eigene Achse / |Own Axis / ',
 	'Eigene Achse|Own Axis',
 	'eigene Achse|Own Axis',
-	'eigene Achse / |Own Axis / ',
 	'Eingang sichern|Save input',
 	'Eis (Kontrolle nicht möglich)|Ice (no control possible)',
 	'Eis und Schnee (Kontrolle nicht möglich)|Ice and snow (cannot be checked)',
@@ -45,6 +48,7 @@ const translationStringPairs = [
 	'Erfasste Fahrzeuge|Registered vehicles',
 	'ERP Aufruf|ERP Call',
 	'Error|',
+	'Fahrstraße|Road',
 	'Fahrzeug wurde an SAP zur Weitervearbeitung übergeben \n|Vehicle was transferred to SAP for further processing.',
 	'Fahrzeug|Vehicle',
 	'Fahrzeugeingang|Vehicle Inbound Registration',
@@ -81,7 +85,7 @@ const translationStringPairs = [
 	'Neue Erfassung|New Entry',
 	'Neuwagen ohne Transportmodus|New car without transport mode',
 	'Neuwagen|New car',
-	'nicht bekannt|unknown',
+	'nicht bekannt|Unknown',
 	'Nicht gefunden (404)|Not found (404)',
 	'Ohne Vorbehalt|Without reservatio',
 	'Paginier Nummer eingeben|Enter Paginier number',
@@ -89,27 +93,32 @@ const translationStringPairs = [
 	'Paginiernummer erfassen|Store Paginier number',
 	'Paginiernummer|Paginier number',
 	'Regen (Kontrolle nicht möglich)|Rain (cannot be checked)',
+	'Reihe|Row',
 	'Review-Schritt|Review Step',
 	'Schadenserfassung|Record a damage',
 	'Schiff|Ship',
+	'Schiffseingang|Inbound Ship',
 	'Schließen|Close',
 	'Schnee (Kontrolle nicht möglich)|Snow (cannot be checked)',
 	'Sixt Einsteuerung - #7289#|Sixt Control - #7289#',
 	'Sommer|Summer',
 	'Sorry, die Seite ist nicht verfügbar!|Sorry, this page is not available!',
+	'Spur|Lane',
 	'Streckenbruch-Prüfung|Check for tour breaks',
+	'Szenario auswählen|Choose scenario',
 	'Tour beenden|End tour',
 	'Touren Übersicht|Tours Overview',
 	'Übernehmen|Confirm',
 	'übertragen|Transmit',
+	'Unbekannter Auftrag|Unknown Contract',
 	'Userdaten und Customizing werden geladen...|Loading user data and customizing...',
 	'verdeckter Schaden (Kontrolle nicht möglich)|Concealed damage (cannot be checked)',
 	'Verkehrsträger auswählen|Choose Vehicle Type',
 	'Vertragsprüfung|Contract review',
-	'VIN fehlt in Aufruf zur VIN_Prüfung|VIN is missing',
-	'VIN scannen|Scan VIN',
 	'VIN darf nicht leer sein!|VIN may not be empty!',
+	'VIN fehlt in Aufruf zur VIN_Prüfung|VIN is missing',
 	'VIN ist zu kurz!|VIN is too short!',
+	'VIN scannen|Scan VIN',
 	'VW Zielbahnhof 38 - #4688#|VW destination station 38 - #4688#',
 	'Warte auf Daten|Waiting for data',
 	'Weiter|Continue',
@@ -119,6 +128,10 @@ const translationStringPairs = [
 	'Zugnummernprüfung|Checking train number',
 	'Zum Host ARV_DREC021 konnte kein Compound ermittelt werden! \n|No compound could be determined for host ARV_DREC021!'
 ];
+
+translationStringPairs.sort((a, b) => {
+	return b.length - a.length;
+});
 
 // const possibleTextClasses = [
 // 	'sapUiInvisibleText',
@@ -155,10 +168,13 @@ function iterateThroughMostInnerDivs() {
 
 		for (let i = 0; i < mostInnerDivs.length; i++) {
 			const currentNode = mostInnerDivs[i];
-			if (currentNode.textContent === germanText) {
+			if (currentNode.textContent.includes(germanText)) {
 				// console.log(currentNode.textContent);
 				const englishTranslation = pair.split('|')[1];
-				currentNode.textContent = englishTranslation;
+				currentNode.textContent = currentNode.textContent.replace(
+					germanText,
+					englishTranslation
+				);
 			}
 
 			if (currentNode.tagName === 'INPUT') {
