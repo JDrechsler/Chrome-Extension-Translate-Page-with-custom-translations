@@ -1,5 +1,15 @@
 //@ts-check
 
+// @ts-ignore
+if (window.ZXing === undefined) {
+	var tag = document.createElement('script');
+	tag.src =
+		'https://cdn.rawgit.com/zxing-js/library/master/docs/examples/zxing.qrcodereader.min.js';
+	tag.type = 'text/javascript';
+	var hookTag = document.getElementsByTagName('script')[0];
+	hookTag.parentNode.insertBefore(tag, hookTag);
+}
+
 /**
  * @description Contains string pairs for translation
  */
@@ -27,7 +37,7 @@ const translationStringPairs = [
 	'Bitte wählen Sie den Abgangsort aus|Please select the location of departure',
 	'Bitte wählen Sie den Fahrzeugtyp aus|Please select the vehicle type',
 	'Bitte wählen Sie den Geschwindigkeitsindex aus|Please select the speed index',
-	'Bitte wählen Sie den Grund des Vorbehaltes aus|Please select the reason for the reservation',
+	'Bitte wählen Sie den Grund des Vorbehaltes aus|Is a visual check for damage possible?',
 	'Bitte wählen Sie den Verkehrsträger aus|Please select the vehicle type',
 	'Bitte wählen Sie die Eingangsblock und -Reihe aus|Please select the inbound block and row',
 	'Bitte wählen Sie die Getriebeart aus|Please select the gear type',
@@ -46,7 +56,7 @@ const translationStringPairs = [
 	'Eis (Kontrolle nicht möglich)|Ice (no control possible)',
 	'Eis und Schnee (Kontrolle nicht möglich)|Ice and snow (cannot be checked)',
 	'Elektromotor|Electric motor',
-	'Entlastung Fahrer|Relief driver',
+	'Entlastung Fahrer|Driver is discharged',
 	'Erfasste Fahrzeuge|Registered vehicles',
 	'ERP Aufruf|ERP Call',
 	'Error|',
@@ -60,11 +70,12 @@ const translationStringPairs = [
 	'Fremd-LKW|Other Truck',
 	'Gebrauchtwagen ohne Transportmodus|Used car without transport mode',
 	'Gebrauchtwagen|Used car',
-	'Grund des Vorbehaltes|Reason',
+	'Grund des Vorbehaltes|Visual check possible',
 	'Hat das Fahrzeug ein Navi?|Does the vehicle have a navigation device?',
 	'Hat das Fahrzeug eine Folie?|Does the vehicle have a foil?',
 	'Hat das Vehicle Startprobleme?|Does the vehicle have engine starting difficulties?',
 	'Herst. / Typ / Vertr.|Manuf / Type / Contr.',
+	'Ist der Transportschutz beschädigt?|Is the transport protection damaged?',
 	'Ja, beschädigt|Yes, damaged',
 	'Ja, unbeschädigt|Yes, undamaged',
 	'Ja|Yes',
@@ -93,7 +104,7 @@ const translationStringPairs = [
 	'Neuwagen|New car',
 	'nicht bekannt|Unknown',
 	'Nicht gefunden (404)|Not found (404)',
-	'Ohne Vorbehalt|No reservation',
+	'Ohne Vorbehalt|Visual check is possible',
 	'Paginier Nummer eingeben|Enter Paginier number',
 	'Paginier Nummer|Paginier number',
 	'Paginiernummer erfassen|Store Paginier number',
@@ -126,11 +137,13 @@ const translationStringPairs = [
 	'VIN fehlt in Aufruf zur VIN_Prüfung|VIN is missing',
 	'VIN ist zu kurz!|VIN is too short!',
 	'VIN scannen|Scan VIN',
+	'sind Geräusche beim Bremsen zu hören?|Can you hear breaking noises?',
 	'VW Zielbahnhof 38 - #4688#|VW destination station 38 - #4688#',
 	'Warte auf Daten|Waiting for data',
 	'Weiter|Continue',
 	'Wert|Value',
 	'Zeit|Time',
+	'Zugnummer nicht als Equipmentstamm vorhanden |Truck number not available',
 	'Zugnummer|Truck number',
 	'Zugnummernprüfung|Checking truck number',
 	'Zum Host ARV_DREC021 konnte kein Compound ermittelt werden! \n|No compound could be determined for host ARV_DREC021!'
@@ -162,19 +175,59 @@ function iterateThroughMostInnerDivs() {
 					inputNode.placeholder = englishTranslation;
 				}
 
+				if (inputNode.placeholder === 'Enter Paginier number') {
+					// @ts-ignore
+					if (window.ZXing !== 'undefined') {
+						if (document.querySelector('video') === null) {
+							const qrSection = document.createElement('video');
+							qrSection.id = 'video';
+							qrSection.style.border = '1px solid gray';
+							qrSection.style.width = '100%';
+							qrSection.style.display = 'none';
+							const inputDiv = inputNode.parentElement.parentElement;
+							inputDiv.parentNode.insertBefore(
+								qrSection,
+								inputDiv.nextElementSibling
+							);
+
+							const btnStart = document.createElement('button');
+							btnStart.id = 'startVideo';
+							btnStart.textContent = 'Start QR Reader';
+							btnStart.className =
+								'sapMBtn sapMBtnDefault sapMBtnInner sapMBtnText';
+							btnStart.style.width = '100%';
+							btnStart.addEventListener('click', () => {
+								startQRReader(qrSection);
+							});
+
+							qrSection.parentElement.insertBefore(
+								btnStart,
+								qrSection.nextElementSibling
+							);
+						}
+					}
+				}
+
 				if (inputNode.placeholder === 'VIN') {
 					inputNode.placeholder = 'TMBJJ7NE4H0071010';
-					copyToClipboard();
+					// copyToClipboard();
+					// if ('ZXing' in Window) {
+					// 	console.log('QR Code Reader supported.');
+					// }
 				}
 			}
 		});
 	});
 }
 
-async function copyToClipboard() {
-	// @ts-ignore
-	await navigator.clipboard.writeText('YV4A22PL4H1172867');
+function startQRReader(/**@type {HTMLVideoElement} */ videoElement) {
+	videoElement.style.display = 'initial';
 }
+
+// async function copyToClipboard() {
+// 	// @ts-ignore
+// 	await navigator.clipboard.writeText('YV4A22PL4H1172867');
+// }
 
 function main() {
 	iterateThroughMostInnerDivs();
